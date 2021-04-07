@@ -30,7 +30,7 @@ libraries=['avformat', 'avcodec','avutil','nvcuvid','nvidia-encode','cuda', 'std
 
 from distutils.core import setup, Extension
 setup(name='pynvcodec',
-    version='0.0.3',
+    version='0.0.4',
     ext_modules=[module],
     cmdclass={'build_ext': custom_build_ext},
     author="Usingnet",
@@ -38,7 +38,7 @@ setup(name='pynvcodec',
     license="MIT",
     description="Python interface for nvcodec. Encode/Decode H264 with Nvidia GPU Hardware Acceleration.",
     long_description=long_description,
-    # long_description_content_type="text/markdown",
+    long_description_content_type="text/markdown",
     url="https://github.com/UsingNet/nvcodec-python",
     # packages=setuptools.find_packages(),
     classifiers=[
