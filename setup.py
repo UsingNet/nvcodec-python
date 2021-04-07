@@ -46,7 +46,7 @@ setup(name='pynvcodec',
         "Programming Language :: Python :: 3 :: Only",
         "License :: OSI Approved :: MIT License",
         "Operating System :: POSIX :: Linux",
-        "Environment :: GPU :: NVIDIA CUDA :: 11.2",
+        "Environment :: GPU :: NVIDIA CUDA :: 11.0",
     ],
     keywords=[
         "pynvcodec",
