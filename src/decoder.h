@@ -37,7 +37,7 @@ typedef struct
 
 videoDecoderHandle videoDecoder_init(enum AVCodecID codec);
 int videoDecoder_destroy(videoDecoderHandle handle);
-videoFrameList* videoDecoder_decode(videoDecoderHandle handle, u_int8_t* in, size_t in_size);
+videoFrameList* videoDecoder_decode(videoDecoderHandle handle, u_int8_t* in, size_t in_size, char*error);
 void videoFrameList_destory(videoFrameList**);
 videoFrameList* videoFrameList_init(int width, int height, int length);
 

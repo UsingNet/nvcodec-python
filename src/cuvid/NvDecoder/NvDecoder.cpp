@@ -178,6 +178,8 @@ int NvDecoder::HandleVideoSequence(CUVIDEOFORMAT *pVideoFormat)
     ;
     m_videoInfo << std::endl;
 
+    // std::cout << m_videoInfo.str();
+
     int nDecodeSurface = pVideoFormat->min_num_decode_surfaces;
 
     CUVIDDECODECAPS decodecaps;
@@ -192,7 +194,9 @@ int NvDecoder::HandleVideoSequence(CUVIDEOFORMAT *pVideoFormat)
     CUDA_DRVAPI_CALL(cuCtxPopCurrent(NULL));
 
     if(!decodecaps.bIsSupported){
+        std::cout << m_videoInfo.str();
         NVDEC_THROW_ERROR("Codec not supported on this GPU", CUDA_ERROR_NOT_SUPPORTED);
+        // NVDEC_THROW_ERROR("Codec not supported on this GPU", CUDA_ERROR_NOT_SUPPORTED);
         return nDecodeSurface;
     }
 

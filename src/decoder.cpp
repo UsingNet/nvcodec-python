@@ -51,15 +51,24 @@ videoFrameList* videoFrameList_init(int width, int height, int length){
 }
 
 
-videoFrameList* videoDecoder_decode(videoDecoderHandle handle, u_int8_t* in, size_t in_size){
+videoFrameList* videoDecoder_decode(videoDecoderHandle handle, u_int8_t* in, size_t in_size, char*error){
     int nFrameReturned;
     int i;
     int frameSize;
     uint8_t *pVideo = NULL, *pFrame;
     videoFrameList* frameList = NULL;
     CUdeviceptr dpFrame = 0, nv12Frame = 0;
-
-    nFrameReturned = DEC(handle)->Decode(in, in_size);
+    if(error!=NULL){
+        error[0] = NULL;
+    }
+    try{
+        nFrameReturned = DEC(handle)->Decode(in, in_size);
+    }catch(NVDECException e){
+        if(error != NULL){
+            strcpy(error, e.what());
+        }
+        return NULL;
+    }
     for (i = 0; i < nFrameReturned; i++) {
         pFrame = DEC(handle)->GetFrame();
         frameSize = DEC(handle)->GetFrameSize();

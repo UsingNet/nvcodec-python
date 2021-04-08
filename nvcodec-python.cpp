@@ -33,7 +33,7 @@ static PyObject* VideoSource_read(NvCodec* Self)
     AVPacket *packet = av_packet_alloc();
     if(videoSource_read(m_handle, packet) < 0){
         av_packet_free(&packet);
-        return NULL;
+        return Py_None;
     }
     PyObject* rtn = PyBytes_FromStringAndSize((const char*)packet->data, packet->size);
     av_packet_free(&packet);
@@ -105,23 +105,31 @@ static PyObject* VideoDecoder_decode(NvCodec* Self, PyObject* pArgs)
     
     unsigned char* data;
     int len;
-    if(!PyArg_ParseTuple(pArgs, "y#", &data, &len)){
+    unsigned int type = 0;
+    if(!PyArg_ParseTuple(pArgs, "y#|I", &data, &len, &type)){
         PyErr_SetString(PyExc_ValueError, "Parse the argument FAILED! You should video byte data!");
-        return NULL;
-    }
-    
-    videoFrameList* list = videoDecoder_decode(m_handle, data, len);
-    if(list == NULL){
-        Py_INCREF(Py_None);
         return Py_None;
     }
-
+    
     PyObject* rtn = Py_BuildValue("[]");
+    char error_str[128];
+    videoFrameList* list = videoDecoder_decode(m_handle, data, len, error_str);
+    if(list == NULL){
+        if(error_str[0] != NULL){
+            PyErr_Format(PyExc_ValueError, "%s", error_str);
+            return NULL;
+        }
+        return rtn;
+    }
+
     npy_intp dims[3] = {(npy_intp)(list->height), (npy_intp)(list->width), 4};
     PyObject* tempFrame;
     for(int i = 0;i<list->length;i++){
         tempFrame = PyArray_SimpleNewFromData(3, dims, NPY_UINT8, list->pFrames + (i*(list->perFrameSize)));
         PyArray_ENABLEFLAGS((PyArrayObject*) tempFrame, NPY_ARRAY_OWNDATA);
+        if(type != 0){
+            tempFrame = PyArray_SwapAxes((PyArrayObject*)tempFrame, 0, 1);
+        }
         PyList_Append(rtn, tempFrame);
     }
     videoFrameList_destory(&list);

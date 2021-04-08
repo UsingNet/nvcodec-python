@@ -30,7 +30,7 @@ libraries=['avformat', 'avcodec','avutil','nvcuvid','nvidia-encode','cuda', 'std
 
 from distutils.core import setup, Extension
 setup(name='pynvcodec',
-    version='0.0.4',
+    version='0.0.5',
     ext_modules=[module],
     cmdclass={'build_ext': custom_build_ext},
     author="Usingnet",

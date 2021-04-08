@@ -30,8 +30,10 @@ h264_data = source.read()
 #### 2. Use VideoDecoder
 ```python
 decoder = VideoDecoder()
+# output OpenCV format frame
 frames = decoder.decode(h264_data)
-# frames can be NULL or List<frame>
+# output SDL format frame
+frames = decoder.decode(h264_data, 1)
 ```
 
 #### 3. Use VideoEncoder
