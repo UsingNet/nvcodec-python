@@ -4,6 +4,7 @@ import os
 import glob
 from setuptools import setup, find_packages, Extension
 from distutils.command.build_ext import build_ext
+import numpy as np
 
 libpath = os.path.abspath(os.path.join(os.path.dirname(__file__), './build/lib'))
 
@@ -23,14 +24,14 @@ if 'VIRTUAL_ENV' in os.environ:
 sources = ['nvcodec-python.cpp'] + glob.glob('src/**/*.cpp', recursive=True)
 
 module = Extension('nvcodec', sources=sources, language='c++', 
-include_dirs=['src', 'src/cuvid', '/usr/local/cuda/include',], 
+include_dirs=['src', 'src/cuvid', '/usr/local/cuda/include',np.get_include(),], 
 library_dirs=['build/lib', '/usr/local/cuda-11.2/targets/x86_64-linux/lib'],
 libraries=['avformat', 'avcodec','avutil','nvcuvid','nvidia-encode','cuda', 'stdc++', 'm', 'cudart', 'color_space'],
 )
 
 from distutils.core import setup, Extension
 setup(name='pynvcodec',
-    version='0.0.5',
+    version='0.0.6',
     ext_modules=[module],
     cmdclass={'build_ext': custom_build_ext},
     author="Usingnet",
