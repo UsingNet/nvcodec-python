@@ -9,12 +9,13 @@
 
 #define ENC(handle) ((NvEncoderCuda*)(handle->enc))
 
-void _InitializeEncoder(NvEncoder* pEnc, NvEncoderInitParam encodeCLIOptions, NV_ENC_BUFFER_FORMAT eFormat)
+void _InitializeEncoder(NvEncoder* pEnc, NvEncoderInitParam encodeCLIOptions, NV_ENC_BUFFER_FORMAT eFormat, int frameRate)
 {
     NV_ENC_INITIALIZE_PARAMS initializeParams = { NV_ENC_INITIALIZE_PARAMS_VER };
     NV_ENC_CONFIG encodeConfig = { NV_ENC_CONFIG_VER };
 
     initializeParams.encodeConfig = &encodeConfig;
+    initializeParams.frameRateDen = frameRate;
 
     pEnc->CreateDefaultEncoderParams(&initializeParams, encodeCLIOptions.GetEncodeGUID(), encodeCLIOptions.GetPresetGUID(), encodeCLIOptions.GetTuningInfo());
     encodeCLIOptions.SetInitParams(&initializeParams, eFormat);
@@ -23,7 +24,7 @@ void _InitializeEncoder(NvEncoder* pEnc, NvEncoderInitParam encodeCLIOptions, NV
 }
 
 
-videoEncoderHandle videoEncoder_init(int width, int height){
+videoEncoderHandle videoEncoder_init(int width, int height, int frameRate){
     videoEncoderHandle handle = (videoEncoderHandle)malloc(sizeof(videoEncoder));
     ck(cuInit(0));
     handle->cuContext = nullptr;
@@ -32,7 +33,7 @@ videoEncoderHandle videoEncoder_init(int width, int height){
 
     NV_ENC_BUFFER_FORMAT eFormat = NV_ENC_BUFFER_FORMAT_ARGB;
     NvEncoderInitParam encodeCLIOptions;
-    _InitializeEncoder(ENC(handle), encodeCLIOptions, eFormat);
+    _InitializeEncoder(ENC(handle), encodeCLIOptions, eFormat, frameRate);
     return handle;
 }
 
