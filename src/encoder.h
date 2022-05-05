@@ -30,7 +30,7 @@ typedef struct
 }videoEncodedBuffer;
 
 
-videoEncoderHandle videoEncoder_init(int width, int height);
+videoEncoderHandle videoEncoder_init(int width, int height, char* params);
 int videoEncoder_destroy(videoEncoderHandle handle);
 videoEncodedBuffer* videoEncoder_encode(videoEncoderHandle handle, u_int8_t* in);
 videoEncodedBuffer* videoEncoder_encode_end(videoEncoderHandle handle);

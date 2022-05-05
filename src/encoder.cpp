@@ -23,7 +23,7 @@ void _InitializeEncoder(NvEncoder* pEnc, NvEncoderInitParam encodeCLIOptions, NV
 }
 
 
-videoEncoderHandle videoEncoder_init(int width, int height){
+videoEncoderHandle videoEncoder_init(int width, int height, char* params){
     videoEncoderHandle handle = (videoEncoderHandle)malloc(sizeof(videoEncoder));
     ck(cuInit(0));
     handle->cuContext = nullptr;
@@ -31,7 +31,7 @@ videoEncoderHandle videoEncoder_init(int width, int height){
     handle->enc = new NvEncoderCuda(handle->cuContext, width, height, NV_ENC_BUFFER_FORMAT_ARGB);
 
     NV_ENC_BUFFER_FORMAT eFormat = NV_ENC_BUFFER_FORMAT_ARGB;
-    NvEncoderInitParam encodeCLIOptions;
+    NvEncoderInitParam encodeCLIOptions(params);
     _InitializeEncoder(ENC(handle), encodeCLIOptions, eFormat);
     return handle;
 }

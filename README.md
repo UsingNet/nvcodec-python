@@ -38,6 +38,6 @@ frames = decoder.decode(h264_data, 1)
 
 #### 3. Use VideoEncoder
 ```python
-encoder = VideoEncoder(width, height)
+encoder = VideoEncoder(width, height, cliParams)
 h264_data = encoder.encode(frame)
 ```
