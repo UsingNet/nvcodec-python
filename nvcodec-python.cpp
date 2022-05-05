@@ -256,12 +256,13 @@ static PyObject* VideoEncoder_Repr(NvCodec* Self)
 
 static void VideoEncoder_init(NvCodec* Self, PyObject* pArgs)
 {
-    unsigned int width,height,frameRate;
-    if(!PyArg_ParseTuple(pArgs, "III", &width, &height, &frameRate)){
+    unsigned int width,height;
+    char* params;
+    if(!PyArg_ParseTuple(pArgs, "IIs", &width, &height, &params)){
         PyErr_SetString(PyExc_ValueError, "Parse the argument FAILED! You should pass width, height and framerate!");
         return;
     }
-    Self->m_handle = (long long)(videoEncoder_init(width, height, frameRate));
+    Self->m_handle = (long long)(videoEncoder_init(width, height, params));
 }
 
 static PyTypeObject VideoEncoder_ClassInfo =
